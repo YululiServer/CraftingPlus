@@ -3,6 +3,7 @@ package xyz.acrylicstyle.crafting.gui;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.Inventory;
@@ -12,7 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.acrylicstyle.crafting.Crafting;
 import xyz.acrylicstyle.crafting.utils.Utils;
-import xyz.acrylicstyle.tomeito_core.utils.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,7 +97,7 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
         });
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getInventory().getHolder() != this) return;
         if (e.getClick() == ClickType.DOUBLE_CLICK) {
