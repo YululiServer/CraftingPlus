@@ -236,6 +236,7 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
         collectItem(e, 39);
         collectItem(e, 40);
         collectItem(e, 41);
+        e.getPlayer().getInventory().remove(Material.BARRIER);
     }
 
     private void collectItem(InventoryCloseEvent e, int index) {
