@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.acrylicstyle.crafting.Crafting;
+import xyz.acrylicstyle.crafting.items.CustomItem;
 import xyz.acrylicstyle.crafting.utils.Utils;
 
 import java.util.ArrayList;
@@ -113,11 +114,13 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
             e.setCancelled(true);
             return;
         }
+        if (e.getSlot() != 25) checkRecipe(e.getInventory());
         if (e.getClickedInventory().getHolder() == this && e.getSlot() == 25 && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
             e.setCancelled(true);
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    if (!checkRecipeCommon(inventory)) return;
                     if (!Utils.hasFullInventory(e.getWhoClicked().getInventory())) {
                         e.getWhoClicked().getInventory().addItem(e.getInventory().getItem(25));
                         e.getInventory().setItem(25, barrier);
@@ -155,88 +158,112 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
                     e.getInventory().setItem(25, barrier);
                 }
             }.runTaskLater(Crafting.getInstance(), 2);
-            return;
         }
-        checkRecipe(e.getInventory());
+    }
+
+    private ItemStack[] getMatrix(Inventory inventory) {
+        ItemStack[] matrix = new ItemStack[25];
+        matrix[0] = inventory.getItem(1);
+        matrix[1] = inventory.getItem(2);
+        matrix[2] = inventory.getItem(3);
+        matrix[3] = inventory.getItem(4);
+        matrix[4] = inventory.getItem(5);
+        // ---
+        matrix[5] = inventory.getItem(10);
+        matrix[6] = inventory.getItem(11);
+        matrix[7] = inventory.getItem(12);
+        matrix[8] = inventory.getItem(13);
+        matrix[9] = inventory.getItem(14);
+        // ---
+        matrix[10] = inventory.getItem(19);
+        matrix[11] = inventory.getItem(20);
+        matrix[12] = inventory.getItem(21);
+        matrix[13] = inventory.getItem(22);
+        matrix[14] = inventory.getItem(23);
+        // ---
+        matrix[15] = inventory.getItem(28);
+        matrix[16] = inventory.getItem(29);
+        matrix[17] = inventory.getItem(30);
+        matrix[18] = inventory.getItem(31);
+        matrix[19] = inventory.getItem(32);
+        // ---
+        matrix[20] = inventory.getItem(37);
+        matrix[21] = inventory.getItem(38);
+        matrix[22] = inventory.getItem(39);
+        matrix[23] = inventory.getItem(40);
+        matrix[24] = inventory.getItem(41);
+        return matrix;
     }
 
     private void checkRecipe(Inventory inventory) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                ItemStack[] matrix = new ItemStack[25];
-                matrix[0] = inventory.getItem(1);
-                matrix[1] = inventory.getItem(2);
-                matrix[2] = inventory.getItem(3);
-                matrix[3] = inventory.getItem(4);
-                matrix[4] = inventory.getItem(5);
-                // ---
-                matrix[5] = inventory.getItem(10);
-                matrix[6] = inventory.getItem(11);
-                matrix[7] = inventory.getItem(12);
-                matrix[8] = inventory.getItem(13);
-                matrix[9] = inventory.getItem(14);
-                // ---
-                matrix[10] = inventory.getItem(19);
-                matrix[11] = inventory.getItem(20);
-                matrix[12] = inventory.getItem(21);
-                matrix[13] = inventory.getItem(22);
-                matrix[14] = inventory.getItem(23);
-                // ---
-                matrix[15] = inventory.getItem(28);
-                matrix[16] = inventory.getItem(29);
-                matrix[17] = inventory.getItem(30);
-                matrix[18] = inventory.getItem(31);
-                matrix[19] = inventory.getItem(32);
-                // ---
-                matrix[20] = inventory.getItem(37);
-                matrix[21] = inventory.getItem(38);
-                matrix[22] = inventory.getItem(39);
-                matrix[23] = inventory.getItem(40);
-                matrix[24] = inventory.getItem(41);
-                ItemStack result = Utils.recipes.get("5x5").get(Arrays.toString(matrix));
-                if (result == null) {
-                    inventory.setItem(25, barrier);
-                    return;
-                }
-                inventory.setItem(25, result);
+                checkRecipeCommon(inventory);
             }
         }.runTaskLater(Crafting.getInstance(), 2);
+    }
+
+    private boolean checkRecipeCommon(Inventory inventory) {
+        ItemStack[] matrix = getMatrix(inventory);
+        ItemStack result = Utils.recipes.get("5x5").get(Arrays.toString(matrix));
+        CustomItem item = Utils.customItem.get("5x5").get(Arrays.toString(matrix));
+        if (item == null) {
+            inventory.setItem(25, barrier);
+            return false;
+        }
+        if (item.isRequiresPermission()) {
+            if (!inventory.getViewers().get(0).hasPermission("craftingplus.recipes." + item.getId())) {
+                inventory.setItem(25, barrier);
+                return false;
+            }
+        }
+        if (result == null) {
+            inventory.setItem(25, barrier);
+            return false;
+        }
+        inventory.setItem(25, result);
+        return true;
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if (e.getInventory().getHolder() != this) return;
-        collectItem(e, 1);
-        collectItem(e, 2);
-        collectItem(e, 3);
-        collectItem(e, 4);
-        collectItem(e, 5);
-        // ---
-        collectItem(e, 10);
-        collectItem(e, 11);
-        collectItem(e, 12);
-        collectItem(e, 13);
-        collectItem(e, 14);
-        // ---
-        collectItem(e, 19);
-        collectItem(e, 20);
-        collectItem(e, 21);
-        collectItem(e, 22);
-        collectItem(e, 23);
-        // ---
-        collectItem(e, 28);
-        collectItem(e, 29);
-        collectItem(e, 30);
-        collectItem(e, 31);
-        collectItem(e, 32);
-        // ---
-        collectItem(e, 37);
-        collectItem(e, 38);
-        collectItem(e, 39);
-        collectItem(e, 40);
-        collectItem(e, 41);
-        e.getPlayer().getInventory().remove(Material.BARRIER);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                collectItem(e, 1);
+                collectItem(e, 2);
+                collectItem(e, 3);
+                collectItem(e, 4);
+                collectItem(e, 5);
+                // ---
+                collectItem(e, 10);
+                collectItem(e, 11);
+                collectItem(e, 12);
+                collectItem(e, 13);
+                collectItem(e, 14);
+                // ---
+                collectItem(e, 19);
+                collectItem(e, 20);
+                collectItem(e, 21);
+                collectItem(e, 22);
+                collectItem(e, 23);
+                // ---
+                collectItem(e, 28);
+                collectItem(e, 29);
+                collectItem(e, 30);
+                collectItem(e, 31);
+                collectItem(e, 32);
+                // ---
+                collectItem(e, 37);
+                collectItem(e, 38);
+                collectItem(e, 39);
+                collectItem(e, 40);
+                collectItem(e, 41);
+                e.getPlayer().getInventory().remove(Material.BARRIER);
+            }
+        }.runTaskLater(Crafting.getInstance(), 3);
     }
 
     private void collectItem(InventoryCloseEvent e, int index) {

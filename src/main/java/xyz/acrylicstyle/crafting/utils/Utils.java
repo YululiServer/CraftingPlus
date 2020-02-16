@@ -1,12 +1,14 @@
 package xyz.acrylicstyle.crafting.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import util.*;
 import util.Collection;
+import util.*;
 import xyz.acrylicstyle.crafting.items.CustomItem;
 import xyz.acrylicstyle.crafting.items.CustomRecipe;
 import xyz.acrylicstyle.crafting.items.LeatherArmor;
@@ -15,9 +17,35 @@ import xyz.acrylicstyle.tomeito_core.utils.Log;
 
 import java.io.File;
 import java.util.*;
+import java.util.function.Consumer;
 
 public final class Utils {
     private Utils() {}
+
+    public static void runPlayer(Player sender, String selector, Consumer<Player> consumer) {
+        switch (selector) {
+            case "@a":
+                getOnlinePlayers().forEach(consumer);
+                break;
+            case "@p":
+            case "@s":
+                consumer.accept(sender);
+                break;
+            case "@r":
+                consumer.accept(getOnlinePlayers().shuffle().first());
+                break;
+            default:
+                Player player = Bukkit.getPlayerExact(selector);
+                consumer.accept(player);
+                break;
+        }
+    }
+
+    public static CollectionList<Player> getOnlinePlayers() {
+        CollectionList<Player> players = new CollectionList<>();
+        players.addAll(Bukkit.getOnlinePlayers());
+        return players;
+    }
 
     public static CollectionList<String> getItemDefinitionStringFiles(String type) {
         File itemsDir = new File("./plugins/CraftingPlus/items" + type + "/");
@@ -56,7 +84,8 @@ public final class Utils {
                     .map(map -> new HashMap.SimpleEntry<>((String) map.keySet().toArray()[0], map.values().toArray()[0]));
             int amount = config.getInt("recipe.result.amount", 1);
             boolean unbreakable = config.getBoolean("unbreakable", false);
-            return new CustomItem(id, material, null, displayName, enchantments, recipesRaw, amount, unbreakable, leather);
+            boolean requiresPermission = config.getBoolean("requiresPermission", false);
+            return new CustomItem(id, material, null, displayName, enchantments, recipesRaw, amount, unbreakable, leather, requiresPermission);
         });
     }
 
@@ -87,11 +116,13 @@ public final class Utils {
     }
 
     public static StringCollection<StringCollection<ItemStack>> recipes = new StringCollection<>();
+    public static StringCollection<StringCollection<CustomItem>> customItem = new StringCollection<>();
     public static StringCollection<Collection<ItemStack[], ItemStack>> recipesRaw = new StringCollection<>();
 
     public static void initializeRecipes(String type) {
         Log.debug("Registering recipe for: " + type);
         StringCollection<ItemStack> recipesList = new StringCollection<>();
+        StringCollection<CustomItem> itemsList = new StringCollection<>();
         Collection<ItemStack[], ItemStack> recipesListRaw = new Collection<>();
         Utils.getCustomItemsCached(type).clone().forEach(item -> {
             Log.debug("Processing recipe for item: " + item.getId());
@@ -117,17 +148,25 @@ public final class Utils {
                 resultItem2.setAmount(resultAmount);
                 item.setRecipe(new CustomRecipe(matrix, resultItem2));
                 Log.debug("Registering item: " + item.getId());
+                itemsList.add(Arrays.toString(matrix), item);
                 recipesList.add(Arrays.toString(matrix), resultItem2);
                 recipesListRaw.add(matrix, resultItem2);
             } else {
                 Log.debug("Matrix size is 0, ignoring: " + item.getId());
             }
         });
+        customItem.add(type, itemsList);
         recipesRaw.add(type, recipesListRaw);
         recipes.add(type, recipesList);
     }
 
     public static boolean hasFullInventory(Inventory inventory) {
         return inventory.firstEmpty() == -1;
+    }
+
+    public static List<String> create64List() {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 64; i++) list.add(Integer.toString(i));
+        return list;
     }
 }

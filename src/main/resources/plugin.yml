@@ -13,3 +13,5 @@ commands:
     description: "Shows recipe list of 5x5 recipes."
   reloadrecipes:
     aliases: ["reload_recipes"]
+  give5x5:
+    aliases: ["5x5give"]

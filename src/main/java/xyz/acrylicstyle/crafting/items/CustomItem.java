@@ -20,6 +20,7 @@ public class CustomItem {
     private int resultAmount;
     private boolean unbreakable;
     private ItemStack leather;
+    private boolean requiresPermission;
 
     public CustomItem(String id,
                       Material material,
@@ -29,7 +30,8 @@ public class CustomItem {
                       CollectionList<Map.Entry<String, Object>> recipesRaw,
                       int resultAmount,
                       boolean unbreakable,
-                      ItemStack leather) {
+                      ItemStack leather,
+                      boolean requiresPermission) {
         this.id = id;
         this.material = material;
         this.recipe = recipe;
@@ -39,6 +41,7 @@ public class CustomItem {
         this.resultAmount = resultAmount;
         this.unbreakable = unbreakable;
         this.leather = leather;
+        this.requiresPermission = requiresPermission;
     }
 
     public String getId() {
@@ -72,6 +75,8 @@ public class CustomItem {
     public int getResultAmount() {
         return resultAmount;
     }
+
+    public boolean isRequiresPermission() { return requiresPermission; }
 
     public ItemStack toItemStack() {
         ItemStack item = this.leather != null ? this.leather : new ItemStack(this.material);
