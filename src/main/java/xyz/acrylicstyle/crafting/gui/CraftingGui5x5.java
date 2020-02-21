@@ -114,7 +114,7 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
             e.setCancelled(true);
             return;
         }
-        if (e.getSlot() != 25) checkRecipe(e.getInventory());
+        if (e.getClickedInventory().getHolder() == this && e.getSlot() != 25) checkRecipe(e.getInventory());
         if (e.getClickedInventory().getHolder() == this && e.getSlot() == 25 && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
             e.setCancelled(true);
             new BukkitRunnable() {
