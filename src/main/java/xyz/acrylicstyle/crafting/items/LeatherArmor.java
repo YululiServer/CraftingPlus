@@ -7,13 +7,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+@SuppressWarnings("unused")
 public enum LeatherArmor {
     HELMET(Material.LEATHER_HELMET),
     CHESTPLATE(Material.LEATHER_CHESTPLATE),
     LEGGINGS(Material.LEATHER_LEGGINGS),
     BOOTS(Material.LEATHER_BOOTS);
 
-    private Material material;
+    private final Material material;
 
     LeatherArmor(Material material) {
         this.material = material;

@@ -16,7 +16,7 @@ import xyz.acrylicstyle.crafting.utils.Utils;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RecipesGui4x4 implements InventoryHolder, Listener {
-    private CollectionList<Inventory> inventoryList = new CollectionList<>();
+    private final CollectionList<Inventory> inventoryList = new CollectionList<>();
     private int page = 0;
 
     public RecipesGui4x4() {

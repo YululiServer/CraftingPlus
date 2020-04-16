@@ -12,8 +12,8 @@ import util.*;
 import xyz.acrylicstyle.crafting.items.CustomItem;
 import xyz.acrylicstyle.crafting.items.CustomRecipe;
 import xyz.acrylicstyle.crafting.items.LeatherArmor;
-import xyz.acrylicstyle.tomeito_core.providers.ConfigProvider;
-import xyz.acrylicstyle.tomeito_core.utils.Log;
+import xyz.acrylicstyle.tomeito_api.providers.ConfigProvider;
+import xyz.acrylicstyle.tomeito_api.utils.Log;
 
 import java.io.File;
 import java.util.*;

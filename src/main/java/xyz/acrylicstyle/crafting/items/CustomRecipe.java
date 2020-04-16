@@ -12,29 +12,7 @@ public class CustomRecipe {
     private ItemStack slot6;
     private ItemStack slot7;
     private ItemStack slot8;
-    private ItemStack result;
-
-    public CustomRecipe(ItemStack slot0,
-                        ItemStack slot1,
-                        ItemStack slot2,
-                        ItemStack slot3,
-                        ItemStack slot4,
-                        ItemStack slot5,
-                        ItemStack slot6,
-                        ItemStack slot7,
-                        ItemStack slot8,
-                        ItemStack result) {
-        this.slot0 = slot0;
-        this.slot1 = slot1;
-        this.slot2 = slot2;
-        this.slot3 = slot3;
-        this.slot4 = slot4;
-        this.slot5 = slot5;
-        this.slot6 = slot6;
-        this.slot7 = slot7;
-        this.slot8 = slot8;
-        this.result = result;
-    }
+    private final ItemStack result;
 
     public CustomRecipe(ItemStack[] matrix, ItemStack result) {
         for (int i = 0; i < matrix.length; i++) {

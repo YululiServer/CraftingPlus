@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import xyz.acrylicstyle.crafting.items.CustomItem;
 import xyz.acrylicstyle.crafting.utils.Utils;
-import xyz.acrylicstyle.tomeito_core.utils.TypeUtil;
+import xyz.acrylicstyle.tomeito_api.utils.TypeUtil;
 
 import java.util.Objects;
 

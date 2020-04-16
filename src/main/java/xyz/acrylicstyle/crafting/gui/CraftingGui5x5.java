@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class CraftingGui5x5 implements InventoryHolder, Listener {
-    private Inventory inventory;
-    private List<Integer> blockedSlots = new ArrayList<>(Arrays.asList(0, 6, 7, 8, 9, 15, 16, 17, 18, 24, 26, 27, 33, 34, 35, 36, 42, 43, 44));
-    private ItemStack barrier;
+    private final Inventory inventory;
+    private final List<Integer> blockedSlots = new ArrayList<>(Arrays.asList(0, 6, 7, 8, 9, 15, 16, 17, 18, 24, 26, 27, 33, 34, 35, 36, 42, 43, 44));
+    private final ItemStack barrier;
 
     public CraftingGui5x5() {
         ItemStack blackGlass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);

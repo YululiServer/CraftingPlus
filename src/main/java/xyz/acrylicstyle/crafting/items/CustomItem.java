@@ -11,16 +11,16 @@ import util.CollectionList;
 import java.util.Map;
 
 public class CustomItem {
-    private String id;
-    private Material material;
+    private final String id;
+    private final Material material;
     private CustomRecipe recipe;
-    private String displayName;
-    private Collection<Enchantment, Integer> enchantments;
-    private CollectionList<Map.Entry<String, Object>> recipesRaw;
-    private int resultAmount;
-    private boolean unbreakable;
-    private ItemStack leather;
-    private boolean requiresPermission;
+    private final String displayName;
+    private final Collection<Enchantment, Integer> enchantments;
+    private final CollectionList<Map.Entry<String, Object>> recipesRaw;
+    private final int resultAmount;
+    private final boolean unbreakable;
+    private final ItemStack leather;
+    private final boolean requiresPermission;
 
     public CustomItem(String id,
                       Material material,

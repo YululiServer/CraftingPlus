@@ -7,7 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import xyz.acrylicstyle.crafting.commands.*;
 import xyz.acrylicstyle.crafting.utils.Utils;
-import xyz.acrylicstyle.tomeito_core.utils.Log;
+import xyz.acrylicstyle.tomeito_api.utils.Log;
 
 import java.util.Objects;
 
