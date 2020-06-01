@@ -58,7 +58,7 @@ public final class Utils {
 
     public static CollectionList<CustomItem> getCustomItems(String type) {
         ICollectionList<String> files = getItemDefinitionStringFiles(type);
-        return files.map(file -> {
+        return (CollectionList<CustomItem>) files.map(file -> {
             Log.debug("Processing file: " + file);
             ConfigProvider config;
             try {

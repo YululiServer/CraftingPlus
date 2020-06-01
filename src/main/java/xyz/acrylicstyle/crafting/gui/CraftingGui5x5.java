@@ -2,6 +2,8 @@ package xyz.acrylicstyle.crafting.gui;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,6 +13,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import xyz.acrylicstyle.crafting.Crafting;
 import xyz.acrylicstyle.crafting.items.CustomItem;
 import xyz.acrylicstyle.crafting.utils.Utils;
@@ -85,14 +88,14 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
     }
 
     @Override
-    public Inventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return this.inventory;
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {
         if (e.getInventory().getHolder() != this) return;
-        checkRecipe(e.getInventory());
+        checkRecipe(e.getWhoClicked(), e.getInventory());
         e.getInventorySlots().forEach(i -> {
             if (blockedSlots.contains(i)) e.setCancelled(true);
         });
@@ -114,7 +117,7 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
             e.setCancelled(true);
             return;
         }
-        if (e.getClickedInventory().getHolder() == this && e.getSlot() != 25) checkRecipe(e.getInventory());
+        if (e.getClickedInventory().getHolder() == this && e.getSlot() != 25) checkRecipe(e.getWhoClicked(), e.getInventory());
         if (e.getClickedInventory().getHolder() == this && e.getSlot() == 25 && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
             e.setCancelled(true);
             new BukkitRunnable() {
@@ -122,7 +125,7 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
                 public void run() {
                     if (!checkRecipeCommon(inventory)) return;
                     if (!Utils.hasFullInventory(e.getWhoClicked().getInventory())) {
-                        e.getWhoClicked().getInventory().addItem(e.getInventory().getItem(25));
+                        e.getWhoClicked().getInventory().addItem(Objects.requireNonNull(e.getInventory().getItem(25)));
                         e.getInventory().setItem(25, barrier);
                     } else return;
                     e.getInventory().setItem(1, new ItemStack(Material.AIR));
@@ -195,11 +198,12 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
         return matrix;
     }
 
-    private void checkRecipe(Inventory inventory) {
+    private void checkRecipe(HumanEntity entity, Inventory inventory) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 checkRecipeCommon(inventory);
+                ((Player) entity).updateInventory();
             }
         }.runTaskLater(Crafting.getInstance(), 2);
     }
@@ -268,6 +272,6 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
 
     private void collectItem(InventoryCloseEvent e, int index) {
         if (e.getInventory().getItem(index) != null && Objects.requireNonNull(e.getInventory().getItem(index)).getType() != Material.AIR)
-            e.getPlayer().getInventory().addItem(e.getInventory().getItem(index));
+            e.getPlayer().getInventory().addItem(Objects.requireNonNull(e.getInventory().getItem(index)));
     }
 }
