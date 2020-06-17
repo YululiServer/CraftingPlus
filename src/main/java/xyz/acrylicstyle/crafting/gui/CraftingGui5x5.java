@@ -205,7 +205,7 @@ public class CraftingGui5x5 implements InventoryHolder, Listener {
                 checkRecipeCommon(inventory);
                 ((Player) entity).updateInventory();
             }
-        }.runTaskLater(Crafting.getInstance(), 2);
+        }.runTaskLater(Crafting.getInstance(), 5);
     }
 
     private boolean checkRecipeCommon(Inventory inventory) {
