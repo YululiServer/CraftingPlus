@@ -51,7 +51,7 @@ public final class Utils {
         File itemsDir = new File("./plugins/CraftingPlus/items" + type + "/");
         String[] itemsArray = itemsDir.list();
         if (itemsArray == null) return new CollectionList<>();
-        return ICollectionList.asList(itemsArray);
+        return (CollectionList<String>) ICollectionList.asList(itemsArray);
     }
 
     private static StringCollection<CollectionList<CustomItem>> customItems = new StringCollection<>();
@@ -77,10 +77,10 @@ public final class Utils {
                 String color = Objects.requireNonNull(config.getString("color", "000000")).replaceAll("#", "");
                 leather = LeatherArmor.valueOf(material.name().replaceAll("LEATHER_(.*)", "$1")).toItemStack(displayName, color);
             }
-            Collection<Enchantment, Integer> enchantments = config.get("enchantments") == null ? null : ICollection.asCollection(config.getConfigSectionValue("enchantments", true))
+            Collection<Enchantment, Integer> enchantments = config.get("enchantments") == null ? null : (Collection<Enchantment, Integer>) ICollection.asCollection(config.getConfigSectionValue("enchantments", true))
                     .map((k, v) -> Enchantment.getByKey(NamespacedKey.minecraft(k)), (k, v) -> (int) v);
             List<Map<?, ?>> recipesRawRaw = config.getMapList("recipe.recipe");
-            CollectionList<Map.Entry<String, Object>> recipesRaw = ICollectionList.asList(recipesRawRaw)
+            ICollectionList<Map.Entry<String, Object>> recipesRaw = ICollectionList.asList(recipesRawRaw)
                     .map(map -> new HashMap.SimpleEntry<>((String) map.keySet().toArray()[0], map.values().toArray()[0]));
             int amount = config.getInt("recipe.result.amount", 1);
             boolean unbreakable = config.getBoolean("unbreakable", false);

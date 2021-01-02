@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import util.Collection;
 import util.CollectionList;
+import util.ICollectionList;
 
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class CustomItem {
     private CustomRecipe recipe;
     private final String displayName;
     private final Collection<Enchantment, Integer> enchantments;
-    private final CollectionList<Map.Entry<String, Object>> recipesRaw;
+    private final ICollectionList<Map.Entry<String, Object>> recipesRaw;
     private final int resultAmount;
     private final boolean unbreakable;
     private final ItemStack leather;
@@ -27,7 +28,7 @@ public class CustomItem {
                       CustomRecipe recipe,
                       String displayName,
                       Collection<Enchantment, Integer> enchantments,
-                      CollectionList<Map.Entry<String, Object>> recipesRaw,
+                      ICollectionList<Map.Entry<String, Object>> recipesRaw,
                       int resultAmount,
                       boolean unbreakable,
                       ItemStack leather,
@@ -68,7 +69,7 @@ public class CustomItem {
         return this.displayName;
     }
 
-    public CollectionList<Map.Entry<String, Object>> getRecipesRaw() {
+    public ICollectionList<Map.Entry<String, Object>> getRecipesRaw() {
         return recipesRaw;
     }
 
